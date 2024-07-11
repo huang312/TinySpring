@@ -11,7 +11,7 @@ public class ApiTest {
     @Test
     public void test_beanFactory() throws BeansException {
         // 1.创建 BeanFactory
-        BeanFactory beanFactory = new DefaultListableBeanFactory();
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
         // 2.创建 BeanDefinition
         BeanDefinition beanDefinition = new BeanDefinition(UserService.class);
         // 3.向BeanFactory注册Bean

@@ -16,6 +16,4 @@ public interface BeanFactory {
      * @return Bean 实例
      */
     Object getBean(String name) throws BeansException;
-
-    void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) throws BeansException;
 }
