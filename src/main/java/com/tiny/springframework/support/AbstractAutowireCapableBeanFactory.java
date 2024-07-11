@@ -13,6 +13,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         try{
             Class beanClass = beanDefinition.getBeanClass();
             bean = beanClass.newInstance();
+            addSingleton(beanName, bean);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new BeansException("failed to instance bean: "+ beanName, e);
         }
