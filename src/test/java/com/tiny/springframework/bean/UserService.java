@@ -1,14 +1,22 @@
 package com.tiny.springframework.bean;
 
 public class UserService {
-    private String name;
+    private UserDao userDao;
     public void queryUserInfo(){
-        System.out.println("查询用户信息: " + name);
+        System.out.println("查询用户信息: " + userDao.getName());
     }
-    public UserService(String name){
-        this.name = name;
+    public UserService(UserDao userDao){
+        this.userDao = userDao;
     }
     public UserService(){
-        this.name = "empty constructor";
+
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
     }
 }
