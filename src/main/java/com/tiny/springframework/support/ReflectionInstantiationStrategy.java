@@ -20,7 +20,7 @@ public class ReflectionInstantiationStrategy implements InstantiationStrategy{
                 return clazz.getDeclaredConstructor(parameters).newInstance(args);
             }
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            throw new BeansException("Failed to instantiate [" + clazz.getName() +"]", e);
+            throw new BeansException("Failed to instantiate bean [" + clazz.getName() +"]", e);
         }
     }
 }
