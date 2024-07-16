@@ -1,7 +1,7 @@
-package com.tiny.springframework.support;
+package com.tiny.springframework.bean.support;
 
-import com.tiny.springframework.config.BeanDefinition;
-import com.tiny.springframework.exception.BeansException;
+import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.exception.BeansException;
 
 /**
  * 实例化策略

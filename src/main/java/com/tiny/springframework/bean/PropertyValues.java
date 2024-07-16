@@ -1,4 +1,4 @@
-package com.tiny.springframework;
+package com.tiny.springframework.bean;
 
 import java.util.ArrayList;
 import java.util.List;

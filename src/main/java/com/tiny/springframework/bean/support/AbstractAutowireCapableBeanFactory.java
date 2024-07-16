@@ -1,11 +1,11 @@
-package com.tiny.springframework.support;
+package com.tiny.springframework.bean.support;
 
-import com.tiny.springframework.PropertyValue;
-import com.tiny.springframework.PropertyValues;
-import com.tiny.springframework.config.BeanDefinition;
-import com.tiny.springframework.config.BeanReference;
-import com.tiny.springframework.exception.BeansException;
-import com.tiny.springframework.utils.BeanUtil;
+import com.tiny.springframework.bean.PropertyValue;
+import com.tiny.springframework.bean.PropertyValues;
+import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.config.BeanReference;
+import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.bean.utils.BeanUtil;
 
 /**
  * 实现 Bean 实例的创建方法

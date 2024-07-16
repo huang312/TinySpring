@@ -1,4 +1,4 @@
-package com.tiny.springframework;
+package com.tiny.springframework.bean;
 
 /**
  * Bean 的属性表示

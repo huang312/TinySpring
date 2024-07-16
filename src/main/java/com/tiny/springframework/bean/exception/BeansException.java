@@ -1,4 +1,4 @@
-package com.tiny.springframework.exception;
+package com.tiny.springframework.bean.exception;
 
 /**
  * Bean 相关的异常

@@ -1,6 +1,4 @@
-package com.tiny.springframework.config;
-
-import com.tiny.springframework.exception.BeansException;
+package com.tiny.springframework.bean.config;
 
 /**
  * 用于引用类型的属性

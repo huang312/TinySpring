@@ -1,10 +1,6 @@
-package com.tiny.springframework;
+package com.tiny.springframework.bean;
 
-import com.tiny.springframework.config.BeanDefinition;
-import com.tiny.springframework.exception.BeansException;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.tiny.springframework.bean.exception.BeansException;
 
 /**
  * Bean 工厂，提供 Bean 获取功能
@@ -25,4 +21,14 @@ public interface BeanFactory {
      * @throws BeansException
      */
     Object getBean(String name, Object... args) throws BeansException;
+
+    /**
+     * 通过 Bean 的名称获取指定类型的Bean实例
+     * @param name
+     * @param clazz
+     * @return
+     * @param <T>
+     * @throws BeansException
+     */
+    <T> T getBean(String name, Class<T> clazz) throws BeansException;
 }

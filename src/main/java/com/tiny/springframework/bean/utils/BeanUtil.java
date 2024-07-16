@@ -1,6 +1,6 @@
-package com.tiny.springframework.utils;
+package com.tiny.springframework.bean.utils;
 
-import com.tiny.springframework.exception.BeansException;
+import com.tiny.springframework.bean.exception.BeansException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

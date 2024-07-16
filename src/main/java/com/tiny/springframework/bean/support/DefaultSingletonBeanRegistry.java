@@ -1,6 +1,6 @@
-package com.tiny.springframework.support;
+package com.tiny.springframework.bean.support;
 
-import com.tiny.springframework.config.SingletonBeanRegistry;
+import com.tiny.springframework.bean.config.SingletonBeanRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

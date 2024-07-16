@@ -1,8 +1,8 @@
-package com.tiny.springframework.support;
+package com.tiny.springframework.bean.support;
 
-import com.tiny.springframework.BeanFactory;
-import com.tiny.springframework.config.BeanDefinition;
-import com.tiny.springframework.exception.BeansException;
+import com.tiny.springframework.bean.BeanFactory;
+import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.exception.BeansException;
 
 /**
  * 模板模式实现 getBean 方法
@@ -23,6 +23,14 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         BeanDefinition beanDefinition = getBeanDefinition(name);
 
         return createBean(name, beanDefinition, args);
+    }
+
+    @Override
+    public <T> T getBean(String name, Class<T> clazz) throws BeansException {
+        T bean = (T) getSingleton(name);
+        if(bean != null) return bean;
+        BeanDefinition beanDefinition = getBeanDefinition(name);
+        return (T) createBean(name, beanDefinition, null);
     }
 
     /**

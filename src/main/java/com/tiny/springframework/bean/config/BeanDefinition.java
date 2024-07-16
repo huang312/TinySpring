@@ -1,6 +1,6 @@
-package com.tiny.springframework.config;
+package com.tiny.springframework.bean.config;
 
-import com.tiny.springframework.PropertyValues;
+import com.tiny.springframework.bean.PropertyValues;
 
 /**
  * BeanDefinition
@@ -10,12 +10,12 @@ public class BeanDefinition {
     private PropertyValues propertyValues;
 
     public BeanDefinition(Class beanClass){
-        this.beanClass = beanClass;
+        this(beanClass, null);
     }
 
     public BeanDefinition(Class beanClass, PropertyValues propertyValues){
         this.beanClass = beanClass;
-        this.propertyValues = propertyValues;
+        this.propertyValues = propertyValues != null ? propertyValues : new PropertyValues();
     }
 
     public Class getBeanClass(){
@@ -31,6 +31,6 @@ public class BeanDefinition {
     }
 
     public PropertyValues getPropertyValues() {
-        return propertyValues;
+        return this.propertyValues;
     }
 }
