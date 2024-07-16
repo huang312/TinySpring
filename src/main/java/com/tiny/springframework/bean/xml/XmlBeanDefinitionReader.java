@@ -1,0 +1,99 @@
+package com.tiny.springframework.bean.xml;
+
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.XmlUtil;
+import com.tiny.springframework.bean.PropertyValue;
+import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.config.BeanReference;
+import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.bean.support.AbstractBeanDefinitionReader;
+import com.tiny.springframework.bean.support.BeanDefinitionReader;
+import com.tiny.springframework.bean.support.BeanDefinitionRegistry;
+import com.tiny.springframework.core.io.Resource;
+import com.tiny.springframework.core.io.ResourceLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * xml BeanDefinition读取器
+ */
+public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
+
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
+        super(registry);
+    }
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
+        super(registry, resourceLoader);
+    }
+    @Override
+    public void loadBeanDefinition(Resource resource) throws BeansException {
+        try(InputStream inputStream = resource.getInputStream()){
+            doLoadBeanDefinition(inputStream);
+        } catch (IOException | ClassNotFoundException e) {
+            throw new BeansException("IOException paring XML document from " + resource, e);
+        }
+    }
+
+    @Override
+    public void loadBeanDefinition(Resource... resources) throws BeansException {
+        for (Resource resource : resources) {
+            loadBeanDefinition(resource);
+        }
+    }
+
+    @Override
+    public void loadBeanDefinition(String location) throws BeansException {
+        Resource resource = getResourceLoader().getResource(location);
+        loadBeanDefinition(resource);
+    }
+
+    private void doLoadBeanDefinition(InputStream inputStream) throws ClassNotFoundException, BeansException {
+        Document document = XmlUtil.readXML(inputStream);
+        Element root = document.getDocumentElement();
+        NodeList childNodes = root.getChildNodes();
+        for(int i = 0; i < childNodes.getLength(); i++){
+            Node node = childNodes.item(i);
+            // 非<bean>标签
+            if(!(node instanceof Element) || !"bean".equals(node.getNodeName())) continue;
+
+            // 解析标签
+            Element bean = (Element) childNodes.item(i);
+            String id = bean.getAttribute("id");
+            String name = bean.getAttribute("name");
+            String className = bean.getAttribute("class");
+            Class<?> aClass = Class.forName(className);
+            // bean的名称 优先级：id > name
+            String beanName = StrUtil.isNotEmpty(id) ? id : name;
+            if(StrUtil.isEmpty(beanName)){
+                beanName = StrUtil.lowerFirst(aClass.getSimpleName());
+            }
+
+            // 定义Bean
+            BeanDefinition beanDefinition = new BeanDefinition(aClass);
+            for(int j = 0; j < bean.getChildNodes().getLength(); j++){
+                Node propertyNode = bean.getChildNodes().item(j);
+                // 非<property>标签
+                if(!(propertyNode instanceof Element) || !"property".equals(propertyNode.getNodeName())){
+                    continue;
+                }
+                Element property = ((Element) propertyNode);
+                String attrName = property.getAttribute("name");
+                String attrValue = property.getAttribute("value");
+                String attrRef = property.getAttribute("ref");
+                Object value = StrUtil.isNotEmpty(attrRef) ? new BeanReference(attrRef) : attrValue;
+                // 创建属性信息
+                PropertyValue propertyValue = new PropertyValue(attrName, value);
+                beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+            }
+            if(getRegistry().containsBeanDefinition(beanName))
+                throw new BeansException("Duplicated bean name ["+ beanName +"] is not allowed");
+            // 注册BeanDefinition
+            getRegistry().registerBeanDefinition(beanName, beanDefinition);
+        }
+    }
+}
