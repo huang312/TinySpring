@@ -1,11 +1,14 @@
 package com.tiny.springframework;
 
+import com.tiny.springframework.bean.PropertyValue;
+import com.tiny.springframework.bean.PropertyValues;
 import com.tiny.springframework.bean.UserDao;
 import com.tiny.springframework.bean.UserService;
-import com.tiny.springframework.config.BeanDefinition;
-import com.tiny.springframework.config.BeanReference;
-import com.tiny.springframework.exception.BeansException;
-import com.tiny.springframework.support.DefaultListableBeanFactory;
+import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.config.BeanReference;
+import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.bean.support.DefaultListableBeanFactory;
+import com.tiny.springframework.bean.xml.XmlBeanDefinitionReader;
 import org.junit.Test;
 
 public class ApiTest {
@@ -49,6 +52,22 @@ public class ApiTest {
         UserService userService = (UserService) beanFactory.getBean("userService");
 
         // 5.测试结果
+        userService.queryUserInfo();
+    }
+
+    @Test
+    public void test_xml_reader() throws BeansException {
+        // 1.创建BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2.创建xmlBeanDefinitionReader
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        xmlBeanDefinitionReader.loadBeanDefinition("classpath:spring.xml");
+
+        // 3.获取bean
+        UserService userService = beanFactory.getBean("userService", UserService.class);
+        UserDao userDao = beanFactory.getBean("userDao", UserDao.class);
+        System.out.println(userDao.getName());
         userService.queryUserInfo();
     }
 }
