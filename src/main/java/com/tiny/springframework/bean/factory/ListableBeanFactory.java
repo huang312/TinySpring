@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 扩展 BeanFactory 接口的接口
  */
-public interface ListableBeanFactory {
+public interface ListableBeanFactory extends BeanFactory{
     /**
      * 按照类型返回 Bean 实例
      *
