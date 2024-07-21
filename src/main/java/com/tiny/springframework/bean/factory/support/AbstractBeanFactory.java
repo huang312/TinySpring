@@ -3,11 +3,19 @@ package com.tiny.springframework.bean.factory.support;
 import com.tiny.springframework.bean.factory.BeanFactory;
 import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
+import com.tiny.springframework.bean.factory.config.ConfigurableBeanFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 模板模式实现 getBean 方法
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    /** BeanPostProcessors to apply in createBean */
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
     @Override
     public Object getBean(String name) throws BeansException {
         Object bean = getSingleton(name);
@@ -50,4 +58,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @throws BeansException
      */
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
 }
