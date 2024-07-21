@@ -9,6 +9,8 @@ public class BeanDefinition {
     private Class beanClass;
     private PropertyValues propertyValues;
 
+    private String initMethodName;
+
     public BeanDefinition(Class beanClass){
         this(beanClass, null);
     }
@@ -32,5 +34,13 @@ public class BeanDefinition {
 
     public PropertyValues getPropertyValues() {
         return this.propertyValues;
+    }
+
+    public String getInitMethodName() {
+        return initMethodName;
+    }
+
+    public void setInitMethodName(String initMethodName) {
+        this.initMethodName = initMethodName;
     }
 }
