@@ -38,4 +38,12 @@ public interface BeanDefinitionReader {
      * @throws BeansException
      */
     void loadBeanDefinition(String location) throws BeansException;
+
+    /**
+     * 根据路径加载资源
+     *
+     * @param locations
+     * @throws BeansException
+     */
+    void loadBeanDefinitions(String[] locations) throws BeansException;
 }
