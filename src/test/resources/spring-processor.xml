@@ -10,4 +10,7 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <bean class="com.tiny.springframework.processor.MyBeanPostProcessor"/>
+    <bean class="com.tiny.springframework.processor.MyBeanFactoryPostProcessor"/>
+
 </beans>

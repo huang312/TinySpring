@@ -9,6 +9,10 @@ import com.tiny.springframework.bean.factory.config.BeanReference;
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.support.DefaultListableBeanFactory;
 import com.tiny.springframework.bean.factory.xml.XmlBeanDefinitionReader;
+import com.tiny.springframework.context.ClassPathXmlApplicationContext;
+import com.tiny.springframework.core.io.DefaultResourceLoader;
+import com.tiny.springframework.processor.MyBeanFactoryPostProcessor;
+import com.tiny.springframework.processor.MyBeanPostProcessor;
 import org.junit.Test;
 
 public class ApiTest {
@@ -67,7 +71,39 @@ public class ApiTest {
         // 3.获取bean
         UserService userService = beanFactory.getBean("userService", UserService.class);
         UserDao userDao = beanFactory.getBean("userDao", UserDao.class);
-        System.out.println(userDao.getName());
+//        System.out.println(userDao.getName());
         userService.queryUserInfo();
+    }
+
+    @Test
+    public void test_context() throws BeansException {
+        // 1.初始化 BeanFactory
+//        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring-processor.xml");
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        // 2.获取Bean对象
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        System.out.println(userService.queryUserInfo());
+    }
+
+    @Test
+    public void test_factory() throws BeansException {
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2.读取配置文件&注册Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinition("classpath:spring.xml");
+
+        // 3.BeanDefinition加载完成 & Bean实例化之前，修改BeanDefinition的值
+        MyBeanFactoryPostProcessor myBeanFactoryPostProcessor = new MyBeanFactoryPostProcessor();
+        myBeanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+
+        // 4.Bean实例化之后，修改Bean的属性信息
+        MyBeanPostProcessor myBeanPostProcessor = new MyBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(myBeanPostProcessor);
+
+        // 5.获取Bean对象调用方法
+        UserService userService = beanFactory.getBean("userService", UserService.class);
+        System.out.println(userService.queryUserInfo());
     }
 }

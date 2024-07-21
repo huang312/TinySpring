@@ -2,30 +2,43 @@ package com.tiny.springframework.bean;
 
 public class UserService {
     private String id;
+    private String company;
+    private String location;
     private UserDao userDao;
-    public void queryUserInfo(){
-        System.out.println("查询用户 "+this.id+" 信息: " + userDao.getName());
-    }
-//    public UserService(UserDao userDao){
-//        this.userDao = userDao;
-//    }
-    public UserService(){
 
+    public String queryUserInfo() {
+        return userDao.queryUserName(id)+", 公司："+company+", 地点"+location;
     }
 
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    public UserDao getUserDao() {
-        return userDao;
+    public String getId() {
+        return id;
     }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

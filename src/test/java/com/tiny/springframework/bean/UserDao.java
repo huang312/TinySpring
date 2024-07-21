@@ -1,19 +1,18 @@
 package com.tiny.springframework.bean;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserDao {
-    private String name;
+    private static Map<String, String> hashMap = new HashMap<>();
 
-    public UserDao(){}
-
-    public UserDao(String name){
-        this.name = name;
+    static {
+        hashMap.put("10001", "小傅哥");
+        hashMap.put("10002", "八杯水");
+        hashMap.put("10003", "阿毛");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public String queryUserName(String uId) {
+        return hashMap.get(uId);
     }
 }
