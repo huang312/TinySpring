@@ -1,6 +1,6 @@
-package com.tiny.springframework.bean.config;
+package com.tiny.springframework.bean.factory.config;
 
-import com.tiny.springframework.bean.ConfigurableListableBeanFactory;
+import com.tiny.springframework.bean.factory.ConfigurableListableBeanFactory;
 import com.tiny.springframework.bean.exception.BeansException;
 
 /**

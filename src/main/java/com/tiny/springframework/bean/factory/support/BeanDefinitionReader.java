@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean.support;
+package com.tiny.springframework.bean.factory.support;
 
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.core.io.Resource;

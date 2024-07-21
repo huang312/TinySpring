@@ -1,9 +1,7 @@
-package com.tiny.springframework.bean.support;
+package com.tiny.springframework.bean.factory.support;
 
 import com.tiny.springframework.core.io.DefaultResourceLoader;
 import com.tiny.springframework.core.io.ResourceLoader;
-
-import java.rmi.registry.Registry;
 
 /**
  * 将getRegistry和getResourceLoader放在抽象类中实现

@@ -4,11 +4,11 @@ import com.tiny.springframework.bean.PropertyValue;
 import com.tiny.springframework.bean.PropertyValues;
 import com.tiny.springframework.bean.UserDao;
 import com.tiny.springframework.bean.UserService;
-import com.tiny.springframework.bean.config.BeanDefinition;
-import com.tiny.springframework.bean.config.BeanReference;
+import com.tiny.springframework.bean.factory.config.BeanDefinition;
+import com.tiny.springframework.bean.factory.config.BeanReference;
 import com.tiny.springframework.bean.exception.BeansException;
-import com.tiny.springframework.bean.support.DefaultListableBeanFactory;
-import com.tiny.springframework.bean.xml.XmlBeanDefinitionReader;
+import com.tiny.springframework.bean.factory.support.DefaultListableBeanFactory;
+import com.tiny.springframework.bean.factory.xml.XmlBeanDefinitionReader;
 import org.junit.Test;
 
 public class ApiTest {

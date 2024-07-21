@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean;
+package com.tiny.springframework.bean.factory;
 
 import com.tiny.springframework.bean.exception.BeansException;
 
@@ -20,7 +20,7 @@ public interface ListableBeanFactory {
 
     /**
      * 返回注册表中所有的 Bean 的名称
-     * 
+     *
      * @return
      */
     String[] getBeanDefinitionNames();

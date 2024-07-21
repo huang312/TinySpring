@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean;
+package com.tiny.springframework.bean.factory.config;
 
 /**
  * 自动化处理Bean工厂配置的接口

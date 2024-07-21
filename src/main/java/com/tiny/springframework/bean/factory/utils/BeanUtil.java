@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean.utils;
+package com.tiny.springframework.bean.factory.utils;
 
 import com.tiny.springframework.bean.exception.BeansException;
 

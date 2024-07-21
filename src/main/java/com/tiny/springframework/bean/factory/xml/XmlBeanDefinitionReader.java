@@ -1,14 +1,13 @@
-package com.tiny.springframework.bean.xml;
+package com.tiny.springframework.bean.factory.xml;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import com.tiny.springframework.bean.PropertyValue;
-import com.tiny.springframework.bean.config.BeanDefinition;
-import com.tiny.springframework.bean.config.BeanReference;
+import com.tiny.springframework.bean.factory.config.BeanDefinition;
+import com.tiny.springframework.bean.factory.config.BeanReference;
 import com.tiny.springframework.bean.exception.BeansException;
-import com.tiny.springframework.bean.support.AbstractBeanDefinitionReader;
-import com.tiny.springframework.bean.support.BeanDefinitionReader;
-import com.tiny.springframework.bean.support.BeanDefinitionRegistry;
+import com.tiny.springframework.bean.factory.support.AbstractBeanDefinitionReader;
+import com.tiny.springframework.bean.factory.support.BeanDefinitionRegistry;
 import com.tiny.springframework.core.io.Resource;
 import com.tiny.springframework.core.io.ResourceLoader;
 import org.w3c.dom.Document;

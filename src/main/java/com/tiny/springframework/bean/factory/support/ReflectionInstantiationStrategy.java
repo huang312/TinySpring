@@ -1,6 +1,6 @@
-package com.tiny.springframework.bean.support;
+package com.tiny.springframework.bean.factory.support;
 
-import com.tiny.springframework.bean.config.BeanDefinition;
+import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.exception.BeansException;
 
 import java.lang.reflect.InvocationTargetException;

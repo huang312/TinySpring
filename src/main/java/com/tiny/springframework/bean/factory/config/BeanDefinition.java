@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean.config;
+package com.tiny.springframework.bean.factory.config;
 
 import com.tiny.springframework.bean.PropertyValues;
 

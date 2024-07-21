@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean.config;
+package com.tiny.springframework.bean.factory.config;
 
 /**
  * 用于引用类型的属性

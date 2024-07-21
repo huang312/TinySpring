@@ -1,4 +1,4 @@
-package com.tiny.springframework.bean.config;
+package com.tiny.springframework.bean.factory.config;
 
 /**
  * 单例获取 Bean 实例
