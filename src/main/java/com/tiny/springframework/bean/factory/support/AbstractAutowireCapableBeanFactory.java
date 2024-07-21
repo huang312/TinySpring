@@ -26,6 +26,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 给 Bean 填充属性
         propertyInjection(beanDefinition, bean);
         // 执行bean的初始化方法和 BeanPostProcessor 的前置和后置处理方法
+        bean = initializeBean(beanName, bean, beanDefinition);
         addSingleton(beanName, bean);
         return bean;
     }
