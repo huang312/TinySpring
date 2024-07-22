@@ -54,7 +54,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     public void destroySingletons() throws BeansException {
         for (String beanName : disposableBeanMap.keySet()) {
             DisposableBean disposableBean = disposableBeanMap.get(beanName);
-            disposableBeanMap.remove(beanName);
+//            disposableBeanMap.remove(beanName);
             try{
                 disposableBean.destroy();
             } catch (Exception e) {

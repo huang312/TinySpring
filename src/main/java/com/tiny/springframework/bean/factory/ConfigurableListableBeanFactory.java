@@ -17,5 +17,5 @@ public interface ConfigurableListableBeanFactory extends ConfigurableBeanFactory
     /**
      * 调用Bean实例的销毁方法
      */
-    void destroySingletons();
+    void destroySingletons() throws BeansException;
 }

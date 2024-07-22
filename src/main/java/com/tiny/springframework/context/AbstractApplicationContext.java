@@ -38,7 +38,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     @Override
     public void close() {
-        getBeanFactory().destroySingletons();
+        try {
+            getBeanFactory().destroySingletons();
+        } catch (BeansException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
