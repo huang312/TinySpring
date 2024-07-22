@@ -72,6 +72,11 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getAttribute("id");
             String name = bean.getAttribute("name");
             String className = bean.getAttribute("class");
+
+            // 从xml配置文件中解析初始化方法和销毁方法
+            String initMethod = bean.getAttribute("init-method");
+            String destroyMethod = bean.getAttribute("destroy-method");
+
             Class<?> aClass = Class.forName(className);
             // bean的名称 优先级：id > name
             String beanName = StrUtil.isNotEmpty(id) ? id : name;
@@ -81,6 +86,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
             // 定义Bean
             BeanDefinition beanDefinition = new BeanDefinition(aClass);
+            // 设置初始化方法和销毁方法
+            beanDefinition.setInitMethodName(initMethod);
+            beanDefinition.setDestroyMethodName(destroyMethod);
             for(int j = 0; j < bean.getChildNodes().getLength(); j++){
                 Node propertyNode = bean.getChildNodes().item(j);
                 // 非<property>标签
