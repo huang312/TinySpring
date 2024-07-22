@@ -31,6 +31,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
+
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
+
     /**
      * 从 beanFactory 中获取所有的beanFactoryPostProcessor并执行
      *

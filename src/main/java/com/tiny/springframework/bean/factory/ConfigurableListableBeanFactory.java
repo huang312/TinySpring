@@ -14,4 +14,8 @@ public interface ConfigurableListableBeanFactory extends ConfigurableBeanFactory
 
     void preInstantiateSingletons() throws BeansException;
 
+    /**
+     * 调用Bean实例的销毁方法
+     */
+    void destroySingletons();
 }

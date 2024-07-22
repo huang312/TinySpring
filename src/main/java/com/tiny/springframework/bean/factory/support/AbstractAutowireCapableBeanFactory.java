@@ -3,6 +3,7 @@ package com.tiny.springframework.bean.factory.support;
 import cn.hutool.core.util.StrUtil;
 import com.tiny.springframework.bean.PropertyValue;
 import com.tiny.springframework.bean.PropertyValues;
+import com.tiny.springframework.bean.factory.DisposableBean;
 import com.tiny.springframework.bean.factory.InitializingBean;
 import com.tiny.springframework.bean.factory.config.AutowireCapableBeanFactory;
 import com.tiny.springframework.bean.factory.config.BeanDefinition;
@@ -27,8 +28,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         propertyInjection(beanDefinition, bean);
         // 执行bean的初始化方法和 BeanPostProcessor 的前置和后置处理方法
         bean = initializeBean(beanName, bean, beanDefinition);
+        // 注册实现了 DisposableBean 接口的Bean对象
+        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
         addSingleton(beanName, bean);
         return bean;
+    }
+
+    protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        }
     }
 
     /**
