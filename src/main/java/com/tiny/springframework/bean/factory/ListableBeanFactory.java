@@ -12,7 +12,7 @@ public interface ListableBeanFactory extends BeanFactory{
      * 按照类型返回 Bean 实例
      *
      * @param type Bean的类型
-     * @return 所有类型未 type 的Bean实例
+     * @return 所有类型为 type 的Bean实例
      * @param <T> 泛型参数
      * @throws BeansException
      */
