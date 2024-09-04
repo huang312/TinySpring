@@ -5,6 +5,7 @@ import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
 import com.tiny.springframework.bean.factory.config.ConfigurableBeanFactory;
+import com.tiny.springframework.utils.ClassUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+    /**
+     * 类加载器
+     */
+    private ClassLoader beanClassLoader = ClassUtil.getDefaultClassLoader();
     @Override
     public Object getBean(String name) throws BeansException {
         Object bean = getSingleton(name);
@@ -72,5 +77,13 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     public List<BeanPostProcessor> getBeanPostProcessors(){
         return this.beanPostProcessors;
+    }
+
+    /**
+     * 获取类加载器
+     * @return
+     */
+    public ClassLoader getBeanClassLoader(){
+        return this.beanClassLoader;
     }
 }
