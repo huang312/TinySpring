@@ -10,12 +10,21 @@ public class UserService implements InitializingBean, DisposableBean, BeanNameAw
     private String company;
     private String location;
     private UserDao userDao;
+    private IUserDao iUserDao;
 
     private ApplicationContext applicationContext;
     private BeanFactory beanFactory;
 
+    public IUserDao getIUserDao() {
+        return iUserDao;
+    }
+
+    public void setIUserDao(IUserDao iUserDao) {
+        this.iUserDao = iUserDao;
+    }
+
     public String queryUserInfo() {
-        return userDao.queryUserName(id)+", 公司："+company+", 地点"+location;
+        return iUserDao.queryUserName(id)+", 公司："+company+", 地点"+location;
     }
 
     public String getId() {

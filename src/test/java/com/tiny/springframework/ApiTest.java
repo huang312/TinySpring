@@ -118,4 +118,31 @@ public class ApiTest {
         String result = userService.queryUserInfo();
         System.out.println("测试结果："+result);
     }
+
+    @Test
+    public void test_prototype() throws BeansException {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2.获取Bean对象
+        UserService userService01 = applicationContext.getBean("userService", UserService.class);
+        UserService userService02 = applicationContext.getBean("userService", UserService.class);
+
+        // 3.把scope设置为prototype 打印对象hash值
+        System.out.println(userService01);
+        System.out.println(userService02);
+    }
+
+    @Test
+    public void test_factory_bean() throws BeansException {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2.获取Bean对象
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        System.out.println("测试结果："+userService.queryUserInfo());
+
+    }
 }
