@@ -53,7 +53,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         for (PropertyValue pv : propertyValues.getPropertyValueList()) {
             Object value = pv.getValue();
             if(pv.getValue() instanceof BeanReference){
-                value = getBean(pv.getName());
+                BeanReference beanReference = (BeanReference) pv.getValue();
+                value = getBean(beanReference.getBeanName());
             }
             BeanUtil.setField(bean, value, pv.getName());
         }
