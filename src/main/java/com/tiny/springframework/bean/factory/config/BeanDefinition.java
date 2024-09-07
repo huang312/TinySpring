@@ -50,6 +50,10 @@ public class BeanDefinition {
         this.prototype = SCOPE_PROTOTYPE.equals(scope);
     }
 
+    public boolean isSingleton(){
+        return singleton;
+    }
+
     public BeanDefinition(Class beanClass){
         this(beanClass, null);
     }

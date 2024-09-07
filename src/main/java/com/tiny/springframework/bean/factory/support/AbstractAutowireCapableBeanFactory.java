@@ -29,7 +29,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         bean = initializeBean(beanName, bean, beanDefinition);
         // 注册实现了 DisposableBean 接口的Bean对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
-        addSingleton(beanName, bean);
+        // Bean的作用域为singleton时保存到内存中
+        if(beanDefinition.isSingleton()){
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
