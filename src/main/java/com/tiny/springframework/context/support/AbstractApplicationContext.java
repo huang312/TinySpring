@@ -27,7 +27,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         // 5.BeanPostProcessor需要提前于其他Bean对象实例化之前进行注册
         registerBeanPostProcessors(beanFactory);
 
-        // 6.提前实例化单例Bean对象 目前是提前实例化了所有的BeanPostProcessor对象
+        // 6.提前实例化单例Bean对象
         beanFactory.preInstantiateSingletons();
     }
 
