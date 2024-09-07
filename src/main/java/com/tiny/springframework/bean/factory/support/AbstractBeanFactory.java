@@ -1,6 +1,7 @@
 package com.tiny.springframework.bean.factory.support;
 
 import com.tiny.springframework.bean.factory.BeanFactory;
+import com.tiny.springframework.bean.factory.FactoryBean;
 import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * 模板模式实现 getBean 方法
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
@@ -23,27 +24,48 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     private ClassLoader beanClassLoader = ClassUtil.getDefaultClassLoader();
     @Override
     public Object getBean(String name) throws BeansException {
-        Object bean = getSingleton(name);
-        if(bean != null) return bean;
-        BeanDefinition beanDefinition = getBeanDefinition(name);
-        return createBean(name, beanDefinition, null);
+        return doGetBean(name);
     }
 
     @Override
     public Object getBean(String name, Object... args) throws BeansException {
-        Object bean = getSingleton(name);
-        if(bean != null) return bean;
-        BeanDefinition beanDefinition = getBeanDefinition(name);
-
-        return createBean(name, beanDefinition, args);
+        return doGetBean(name, args);
     }
 
     @Override
     public <T> T getBean(String name, Class<T> clazz) throws BeansException {
-        T bean = (T) getSingleton(name);
-        if(bean != null) return bean;
+        return (T) getBean(name);
+    }
+
+    private Object doGetBean(String name, Object... args) throws BeansException {
+        Object bean = getSingleton(name);
+        if(bean != null) return getObjectForBeanInstance(bean, name);
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        return (T) createBean(name, beanDefinition, null);
+
+        bean = createBean(name, beanDefinition, args);
+        return getObjectForBeanInstance(bean, name);
+    }
+
+    /**
+     *
+     * @param beanInstance
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) throws BeansException {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        Object object = getCachedObjectForFactoryBean(beanName);
+        if (object == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            object = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return object;
+
+
     }
 
     /**
