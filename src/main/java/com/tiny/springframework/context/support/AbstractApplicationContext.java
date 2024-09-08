@@ -9,6 +9,7 @@ import com.tiny.springframework.context.ApplicationListener;
 import com.tiny.springframework.context.ConfigurableApplicationContext;
 import com.tiny.springframework.context.event.ApplicationEventMulticaster;
 import com.tiny.springframework.context.event.ContextCloseEvent;
+import com.tiny.springframework.context.event.ContextRefreshedEvent;
 import com.tiny.springframework.context.event.SimpleApplicationEventMulticaster;
 import com.tiny.springframework.core.io.DefaultResourceLoader;
 
@@ -75,7 +76,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     private void finishRefresh() throws BeansException {
-        publishEvent(new ContextCloseEvent(this));
+        publishEvent(new ContextRefreshedEvent(this));
     }
 
     protected abstract void refreshBeanFactory() throws BeansException;
