@@ -10,6 +10,7 @@ import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.support.DefaultListableBeanFactory;
 import com.tiny.springframework.bean.factory.xml.XmlBeanDefinitionReader;
 import com.tiny.springframework.context.support.ClassPathXmlApplicationContext;
+import com.tiny.springframework.event.CustomEvent;
 import com.tiny.springframework.processor.MyBeanFactoryPostProcessor;
 import com.tiny.springframework.processor.MyBeanPostProcessor;
 import org.junit.Test;
@@ -144,5 +145,13 @@ public class ApiTest {
         UserService userService = applicationContext.getBean("userService", UserService.class);
         System.out.println("测试结果："+userService.queryUserInfo());
 
+    }
+
+    @Test
+    public void test_event() throws BeansException {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.publishEvent(new CustomEvent(applicationContext, 1019129009086763L, "成功了！"));
+
+        applicationContext.registerShutdownHook();
     }
 }
