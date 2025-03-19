@@ -15,6 +15,8 @@ import com.tiny.springframework.processor.MyBeanFactoryPostProcessor;
 import com.tiny.springframework.processor.MyBeanPostProcessor;
 import org.junit.Test;
 
+import java.util.Map;
+
 public class ApiTest {
 
     @Test
@@ -153,5 +155,12 @@ public class ApiTest {
         applicationContext.publishEvent(new CustomEvent(applicationContext, 1019129009086763L, "成功了！"));
 
         applicationContext.registerShutdownHook();
+    }
+
+    @Test
+    public void test_scan() throws BeansException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-scan.xml");
+        com.tiny.springframework.scan.UserService userService = context.getBean("userService", com.tiny.springframework.scan.UserService.class);
+        userService.queryInfo("张三");
     }
 }
