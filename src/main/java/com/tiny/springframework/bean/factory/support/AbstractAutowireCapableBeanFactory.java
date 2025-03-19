@@ -4,13 +4,11 @@ import cn.hutool.core.util.StrUtil;
 import com.tiny.springframework.bean.PropertyValue;
 import com.tiny.springframework.bean.PropertyValues;
 import com.tiny.springframework.bean.factory.*;
-import com.tiny.springframework.bean.factory.config.AutowireCapableBeanFactory;
-import com.tiny.springframework.bean.factory.config.BeanDefinition;
-import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
-import com.tiny.springframework.bean.factory.config.BeanReference;
+import com.tiny.springframework.bean.factory.config.*;
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.utils.BeanUtil;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
@@ -21,19 +19,55 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException{
-        // 创建Bean实例
-        Object bean = instantiationStrategy.instantiate(beanDefinition, beanName, args);
-        // 给 Bean 填充属性
-        propertyInjection(beanDefinition, bean);
-        // 执行bean的初始化方法和 BeanPostProcessor 的前置和后置处理方法
-        bean = initializeBean(beanName, bean, beanDefinition);
-        // 注册实现了 DisposableBean 接口的Bean对象
-        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
-        // Bean的作用域为singleton时保存到内存中
-        if(beanDefinition.isSingleton()){
-            addSingleton(beanName, bean);
+        Object bean = null;
+        try {
+            // 判断是否需要返回代理对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (null != bean) {
+                return bean;
+            }
+            // 创建Bean实例
+            bean = instantiationStrategy.instantiate(beanDefinition, beanName, args);
+            // 给 Bean 填充属性
+            propertyInjection(beanDefinition, bean);
+            // 执行bean的初始化方法和 BeanPostProcessor 的前置和后置处理方法
+            bean = initializeBean(beanName, bean, beanDefinition);
+            // 注册实现了 DisposableBean 接口的Bean对象
+            registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+            // Bean的作用域为singleton时保存到内存中
+            if(beanDefinition.isSingleton()){
+                addSingleton(beanName, bean);
+            }
+        } catch (Exception e) {
+            throw new BeansException("Instantiation of bean failed [" + beanDefinition + "]", e);
         }
         return bean;
+    }
+
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) throws BeansException {
+        Object bean = applyBeanPostProcessorBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(
+                        beanClass, beanName
+                );
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    public InstantiationStrategy getInstantiationStrategy() {
+        return instantiationStrategy;
     }
 
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {

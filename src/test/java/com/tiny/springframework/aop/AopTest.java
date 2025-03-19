@@ -4,6 +4,8 @@ import com.tiny.springframework.aop.aspectj.AspectJExpressionPointcut;
 import com.tiny.springframework.aop.framework.Cglib2AopProxy;
 import com.tiny.springframework.aop.framework.JdkDynamicAopProxy;
 import com.tiny.springframework.aop.framework.ReflectiveMethodInvocation;
+import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.context.support.ClassPathXmlApplicationContext;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.junit.Test;
 
@@ -71,6 +73,13 @@ public class AopTest {
 
         IUserService proxy_cglib = (IUserService) new Cglib2AopProxy(advisedSupport).getProxy();
         System.out.println("测试结果： " + proxy_cglib.queryUserInfo());
+    }
 
+    @Test
+    public void test_aop_spring() throws BeansException {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-aop.xml");
+        IUserService userService = context.getBean("userService", IUserService.class);
+        System.out.println(userService.queryUserInfo());
+        System.out.println(userService.register("bb"));
     }
 }

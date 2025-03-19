@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userService" class="com.tiny.springframework.aop.UserService"/>
+    <bean class="com.tiny.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <bean id="beforeAdvice" class="com.tiny.springframework.aop.UserServiceBeforeAdvice"/>
+    <bean id="methodInterceptor" class="com.tiny.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+    <bean id="pointcutAdvisor" class="com.tiny.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="advice" ref="methodInterceptor"/>
+        <property name="expression" value="execution(* com.tiny.springframework.aop.IUserService.*(..))"/>
+    </bean>
+
+</beans>
