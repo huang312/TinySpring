@@ -163,4 +163,7 @@ public class ApiTest {
         com.tiny.springframework.scan.UserService userService = context.getBean("userService", com.tiny.springframework.scan.UserService.class);
         userService.queryInfo("张三");
     }
+
+//    @Test
+//    public void test_
 }
