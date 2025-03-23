@@ -48,7 +48,7 @@ public class ClasspathBeanDefinitionScanner extends ClasspathBeanDefinitionCandi
         Component component = beanClass.getAnnotation(Component.class);
         String value = component.value();
         if (StrUtil.isEmpty(value)) {
-            value = beanClass.getSimpleName();
+            value = StrUtil.lowerFirst(beanClass.getSimpleName());
         }
         return value;
     }
