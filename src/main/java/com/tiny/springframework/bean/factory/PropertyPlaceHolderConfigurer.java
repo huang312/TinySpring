@@ -43,7 +43,7 @@ public class PropertyPlaceHolderConfigurer implements BeanFactoryPostProcessor {
                 BeanDefinition beanDefinition = beanFactory.getBeanDefinition(beanName);
 
                 PropertyValues propertyValues = beanDefinition.getPropertyValues();
-                for (PropertyValue propertyValue : propertyValues.getPropertyValueList()) {
+                for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
                     Object value = propertyValue.getValue();
                     if (!(value instanceof String)) continue;
 
