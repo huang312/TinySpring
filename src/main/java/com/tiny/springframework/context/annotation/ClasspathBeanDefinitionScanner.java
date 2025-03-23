@@ -2,6 +2,7 @@ package com.tiny.springframework.context.annotation;
 
 import cn.hutool.core.util.StrUtil;
 import com.tiny.springframework.bean.exception.BeansException;
+import com.tiny.springframework.bean.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.factory.support.BeanDefinitionRegistry;
 import com.tiny.springframework.stereotype.Component;
@@ -22,10 +23,15 @@ public class ClasspathBeanDefinitionScanner extends ClasspathBeanDefinitionCandi
         for (String basePackage : basePackages) {
             Set<BeanDefinition> candidateComponents = findCandidateComponents(basePackage);
             for (BeanDefinition beanDefinition : candidateComponents) {
-                beanDefinition.setScope(resolveBeanScope(beanDefinition));
+                String beanScope = resolveBeanScope(beanDefinition);
+                if (StrUtil.isNotEmpty(beanScope)) {
+                    beanDefinition.setScope(beanScope);
+                }
                 registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+        registry.registerBeanDefinition("com.tiny.springframework.bean.factory.annotation.AutowiredAnnotationBeanPostProcessor",
+                new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {

@@ -5,9 +5,9 @@ import com.tiny.springframework.bean.PropertyValues;
 import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.config.BeanDefinition;
 import com.tiny.springframework.bean.factory.config.BeanFactoryPostProcessor;
-import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
 import com.tiny.springframework.core.io.DefaultResourceLoader;
 import com.tiny.springframework.core.io.Resource;
+import com.tiny.springframework.utils.StringValueResolver;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -46,24 +46,45 @@ public class PropertyPlaceHolderConfigurer implements BeanFactoryPostProcessor {
                 for (PropertyValue propertyValue : propertyValues.getPropertyValueList()) {
                     Object value = propertyValue.getValue();
                     if (!(value instanceof String)) continue;
-                    String strVal = (String) value;
-                    StringBuilder buffer = new StringBuilder(strVal);
-                    int startIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
-                    int stopIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
-                    if (startIdx != -1 && stopIdx != -1 && startIdx < stopIdx) {
-                        String propKey = strVal.substring(startIdx + 2, stopIdx);
-                        String propVal = properties.getProperty(propKey);
-                        buffer.replace(startIdx, stopIdx + 1, propVal);
-                        propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), buffer.toString()));
-                    }
+
+                    value = resolvePlaceholder((String) value, properties);
+                    propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), value));
                 }
             }
+
+            PlaceholderResolvingStringValueResolver resolver = new PlaceholderResolvingStringValueResolver(properties);
+            beanFactory.addEmbeddedValueResolver(resolver);
         } catch (IOException e) {
             throw new BeansException("Could not load properties", e);
         }
     }
 
+    public String resolvePlaceholder(String strVal, Properties properties) {
+        StringBuffer buffer = new StringBuffer(strVal);
+        int startIndex = buffer.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
+        int stopIndex = buffer.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
+        if (startIndex != -1 && stopIndex != -1 && startIndex < stopIndex) {
+            String propKey = strVal.substring(startIndex+2, stopIndex);
+            String propVal = properties.getProperty(propKey);
+            buffer.replace(startIndex, stopIndex+1, propVal);
+        }
+        return buffer.toString();
+    }
+
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    private class PlaceholderResolvingStringValueResolver implements StringValueResolver {
+        private final Properties properties;
+
+        private PlaceholderResolvingStringValueResolver(Properties properties) {
+            this.properties = properties;
+        }
+
+        @Override
+        public String resolveStringValue(String strVal) {
+            return PropertyPlaceHolderConfigurer.this.resolvePlaceholder(strVal, properties);
+        }
     }
 }

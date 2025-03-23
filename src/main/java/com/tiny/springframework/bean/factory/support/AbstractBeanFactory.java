@@ -7,6 +7,7 @@ import com.tiny.springframework.bean.exception.BeansException;
 import com.tiny.springframework.bean.factory.config.BeanPostProcessor;
 import com.tiny.springframework.bean.factory.config.ConfigurableBeanFactory;
 import com.tiny.springframework.utils.ClassUtil;
+import com.tiny.springframework.utils.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,23 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
+
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        this.embeddedValueResolvers.add(valueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver resolver : embeddedValueResolvers) {
+            result = resolver.resolveStringValue(result);
+        }
+        return result;
+    }
+
     /**
      * 类加载器
      */

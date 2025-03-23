@@ -28,6 +28,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }
             // 创建Bean实例
             bean = instantiationStrategy.instantiate(beanDefinition, beanName, args);
+            // 在设置Bean属性之前，允许BeanPostProcessor修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
             // 给 Bean 填充属性
             propertyInjection(beanDefinition, bean);
             // 执行bean的初始化方法和 BeanPostProcessor 的前置和后置处理方法
@@ -42,6 +44,20 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             throw new BeansException("Instantiation of bean failed [" + beanDefinition + "]", e);
         }
         return bean;
+    }
+
+    protected void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) throws BeansException {
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            if (processor instanceof InstantiationAwareBeanPostProcessor) {
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) processor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                if (null != pvs) {
+                    for (PropertyValue propertyValue : pvs.getPropertyValueList()) {
+                        beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+
+                    }
+                }
+            }
+        }
     }
 
     protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) throws BeansException {
