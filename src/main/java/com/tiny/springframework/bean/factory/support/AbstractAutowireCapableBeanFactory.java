@@ -19,13 +19,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     @Override
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException{
+        // 判断是否需要返回代理对象
+        Object bean = resolveBeforeInstantiation(beanName, beanDefinition);
+        if (null != bean) {
+            return bean;
+        }
+        return doCreateBean(beanName, beanDefinition, args);
+    }
+
+    protected Object doCreateBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean = null;
         try {
-            // 判断是否需要返回代理对象
-            bean = resolveBeforeInstantiation(beanName, beanDefinition);
-            if (null != bean) {
-                return bean;
-            }
             // 创建Bean实例
             bean = instantiationStrategy.instantiate(beanDefinition, beanName, args);
             // 在设置Bean属性之前，允许BeanPostProcessor修改属性值
@@ -51,9 +55,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             if (processor instanceof InstantiationAwareBeanPostProcessor) {
                 PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) processor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
                 if (null != pvs) {
-                    for (PropertyValue propertyValue : pvs.getPropertyValueList()) {
+                    for (PropertyValue propertyValue : pvs.getPropertyValues()) {
                         beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
-
                     }
                 }
             }
