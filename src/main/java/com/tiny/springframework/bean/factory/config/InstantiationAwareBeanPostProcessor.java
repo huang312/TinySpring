@@ -15,7 +15,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 
     PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException;
 
-    default Object getEarlyBeanReference(Object bean, String beanName) {
+    default Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
         return bean;
     }
 }
