@@ -42,17 +42,7 @@ public class DefaultAdvisorAutoProxyCreator implements BeanFactoryAware, Instant
             if (!classFilter.matches(beanClass)) continue;
             AdvisedSupport advisedSupport = new AdvisedSupport();
             TargetSource targetSource = null;
-            try {
-                targetSource = new TargetSource(beanClass.getDeclaredConstructor().newInstance());
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            }
+            targetSource = new TargetSource(bean);
             advisedSupport.setTargetSource(targetSource);
             advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
             advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
